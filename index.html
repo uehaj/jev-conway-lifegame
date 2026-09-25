@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>Jev ライフゲーム</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="bar">
+      <button id="play">再生</button>
+      <button id="step">1世代送り</button>
+      <button id="reset">リセット</button>
+      <span>世代 <b id="gen">0</b></span>
+      <select id="preset"></select>
+      <button id="random">ランダム</button>
+      <span class="edge">
+        <button id="dead">外側は死</button><button id="torus">トーラス</button>
+      </span>
+      <span class="key">
+        <input id="key" type="password" placeholder="TypeSafe API キー" autocomplete="off" />
+        <button id="save">保存</button>
+        <button id="clear">消去</button>
+        <span id="keyerr"></span>
+        <small>キーはこのブラウザの localStorage に平文で保存されます</small>
+      </span>
+    </div>
+    <div id="status"></div>
+    <div id="boards"></div>
+    <p class="legend">濃い = 生 / 薄い = 死 / 濃さは Jev の自信 / 赤枠 = 正しいルールと食い違い</p>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

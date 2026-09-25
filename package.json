@@ -1,0 +1,12 @@
+{
+  "name": "jev-conway-lifegame",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "test": "node --test test/*.test.js"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
+}

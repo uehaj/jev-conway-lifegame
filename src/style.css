@@ -1,0 +1,13 @@
+body { font-family: system-ui, sans-serif; margin: 16px; color: #222; background: #fff; }
+.bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.edge button[aria-pressed="true"] { background: #333; color: #fff; }
+.key { margin-left: auto; display: flex; gap: 4px; align-items: center; }
+#keyerr { color: #c00; }
+#status { min-height: 1.5em; margin: 8px 0; color: #a40; }
+#boards { display: flex; flex-wrap: wrap; gap: 24px; }
+.board h2 { font-size: 15px; margin: 0; }
+.board p { font-size: 12px; margin: 2px 0 6px; color: #666; }
+.grid { display: grid; grid-template-columns: repeat(16, 20px); border: 1px solid #999; width: max-content; }
+.grid div { width: 20px; height: 20px; box-sizing: border-box; border: 1px solid #eee; }
+.grid div.bad { border: 2px solid #e00; }
+.legend { font-size: 13px; color: #555; }
