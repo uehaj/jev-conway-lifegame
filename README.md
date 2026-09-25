@@ -21,6 +21,45 @@ Jev（TypeSafe の System One モデル `jev-1.13.0`）に、ライフゲーム�
 - 赤枠は、その世代で正しいルールを当てはめた結果と食い違ったセルです。
 - セルにカーソルを載せると、確率と正解が出ます。
 
+## Jev へのプロンプト
+
+プロンプトは `src/jev.js` で組み立てています。1世代ごとに、モードごとに1リクエストを送ります。1リクエストの中身は、共通の state と、セルごとの質問 256 問です。質問の名前は `c<行>_<列>` で、型はどれも Noul（「はい」である確率を返す問い）です。
+
+### ルール文
+
+全盤面モードと近傍モードでは、state の `rules` に次の文を入れます（`rules(torus, n)`）。
+
+```
+Conway's Game of Life. '#' is a live cell, '.' is a dead cell. <端の扱いの1文>
+A live cell with 2 or 3 live neighbours stays alive; a dead cell with exactly 3 live neighbours becomes alive;
+every other cell is dead in the next generation. Neighbours are the 8 surrounding cells.
+```
+
+端の扱いの1文は、次のどちらかです。
+
+- 外側は死: `Cells outside the board are dead.`
+- トーラス: 上下の端と左右の端がつながっていることを書き、「0 行目の上は 15 行目、0 列目の左は 15 列目」と具体的に添えた文
+
+### モードごとの state と質問
+
+3つのモードは、Jev に任せる仕事を段階的に減らしていく並びです。どこまで減らせば Jev が正しく判定できるかを、盤面を並べて見比べます。
+
+| モード | state | セル (r, c) への質問 | Jev に任せる仕事 |
+|---|---|---|---|
+| 全盤面 | `rules` と 16 行の `board` | ``Look at `board` (row r, column c, both 0-indexed; the character `board[r][c]`). Is this cell alive in the next generation?`` | 座標でセルを探す、隣を数える、ルールを当てはめる |
+| 近傍 | `rules` と、セルごとの 3×3 の窓 `neighborhoods["r,c"]` | ``… is a 3x3 window; its centre character is the cell. Is the centre cell alive in the next generation?`` | 隣を数える、ルールを当てはめる（セルを探すのはコード） |
+| カウント | 隣の数 `n["r,c"]` だけ（ルール文なし） | 生のセル: ``… A live cell survives only when it has 2 or 3 live neighbours. Does this cell die?``<br>死のセル: ``… A dead cell comes to life only when it has exactly 3 live neighbours. Does this cell come to life?`` | ルールを当てはめるだけ（数えるのはコード） |
+
+### 書き方の意図
+
+- **カウントモードでは、そのセルに関係するルールを1本だけ質問に書きます。** 生き残りと誕生のルールを1問に詰め込むと、Jev が誤りました。1問1ルールに分けると、プロトタイプの 8×8 では 64 セルすべて正解しました。
+- **カウントモードの確率は変換します。** 生のセルには「死ぬか」を聞くので、生である確率は `1 − p` です。死のセルには「生まれるか」を聞くので、`p` をそのまま使います。どのモードでも、生である確率が 0.5 以上なら生とします。
+- **全盤面モードのトーラス対応は、ルール文の1文を差し替えるだけです。** 盤面の渡し方は変えません。これで端の判定が崩れても、それもデモの見どころとして受け入れます。
+- **近傍モードの窓とカウントモードの隣の数は、コードが端の扱いに従って作ります。**
+- プロトタイプ（`prototype-jev-probe/`）で試したのは、「外側は死」の文を使ったルール文だけです。
+
+プロンプトの全文と、決めた経緯は `docs/spec.md` の「4.3 モードごとの state と質問」にあります。
+
 ## 見え方の例
 
 初期盤面は glider と blinker です（世代 0）。
