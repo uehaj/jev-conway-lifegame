@@ -43,7 +43,7 @@ test("成功: 確率の表を返し、リクエストの形が合う", async () 
   assert.equal(out.c0_0, 0.7);
   assert.equal(sent.url, "/v1/systemone");
   assert.equal(sent.init.headers.Authorization, "Bearer k");
-  assert.equal(JSON.parse(sent.init.body).model, "jev-1.13");
+  assert.equal(JSON.parse(sent.init.body).model, "jev-1.13.0");
 });
 
 test("429 は Retry-After に従って再試行し、3回で諦める", async () => {

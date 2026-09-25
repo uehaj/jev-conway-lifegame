@@ -81,7 +81,7 @@ export async function ask({ state, questions }, { key, signal, onRetry = () => {
       res = await fetch("/v1/systemone", {
         method: "POST",
         headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "jev-1.13", state, questions }),
+        body: JSON.stringify({ model: "jev-1.13.0", state, questions }),
         signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(TIMEOUT_MS)]) : AbortSignal.timeout(TIMEOUT_MS),
       });
     } catch (e) {

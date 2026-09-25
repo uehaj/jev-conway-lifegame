@@ -45,10 +45,10 @@ POST /v1/systemone
 Authorization: Bearer <キー>
 Content-Type: application/json
 
-{ "model": "jev-1.13", "state": { ... }, "questions": { "c0_0": { "type": "noul", "instructions": "..." }, ... } }
+{ "model": "jev-1.13.0", "state": { ... }, "questions": { "c0_0": { "type": "noul", "instructions": "..." }, ... } }
 ```
 
-- モデルは `jev-1.13` に固定する。
+- モデルは `jev-1.13.0` に固定する（`jev-1.13` は `400 Unknown model` になる。名前は https://docs.typesafe.ai/models.md ）。
 - 質問は1リクエストに全セル分の 256 問を入れる。質問の名前は `c<行>_<列>`（例: `c3_7`）。
 - SDK は使わず `fetch` で呼ぶ。
 
